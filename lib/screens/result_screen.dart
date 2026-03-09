@@ -15,6 +15,14 @@ class ResultScreen extends StatelessWidget {
     final gradeColor = provider.gradeColor(context);
 
     return Scaffold(
+      bottomNavigationBar: Container(
+        color: Colors.transparent,
+        padding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+        child: FadeInUp(
+          delay: const Duration(milliseconds: 700),
+          child: _buildButtons(context, provider),
+        ),
+      ),
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -24,50 +32,44 @@ class ResultScreen extends StatelessWidget {
           ),
         ),
         child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(24, 20, 24, 12),
             child: Column(
               children: [
-                const SizedBox(height: 30),
                 FadeInDown(
                   duration: const Duration(milliseconds: 600),
                   child: _buildHeader(),
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 20),
                 ZoomIn(
                   duration: const Duration(milliseconds: 700),
                   child: _buildScoreCircle(percent, gradeColor, provider),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 10),
                 FadeInUp(
                   delay: const Duration(milliseconds: 400),
                   child: Text(
                     provider.gradeMessage,
                     style: TextStyle(
                       fontFamily: 'Poppins',
-                      fontSize: 22,
+                      fontSize: 20,
                       fontWeight: FontWeight.w700,
                       color: gradeColor,
                       shadows: [Shadow(color: gradeColor, blurRadius: 15)],
                     ),
                   ),
                 ),
-                const SizedBox(height: 28),
+                const SizedBox(height: 20),
                 FadeInUp(
                   delay: const Duration(milliseconds: 500),
                   child: _buildStatsRow(provider),
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 16),
                 FadeInUp(
                   delay: const Duration(milliseconds: 600),
                   child: _buildReviewSection(provider),
                 ),
-                const Spacer(),
-                FadeInUp(
-                  delay: const Duration(milliseconds: 700),
-                  child: _buildButtons(context, provider),
-                ),
-                const SizedBox(height: 28),
+                const SizedBox(height: 16),
               ],
             ),
           ),
@@ -100,8 +102,8 @@ class ResultScreen extends StatelessWidget {
   Widget _buildScoreCircle(
       double percent, Color gradeColor, QuizProvider provider) {
     return CircularPercentIndicator(
-      radius: 100,
-      lineWidth: 12,
+      radius: 85,
+      lineWidth: 11,
       percent: percent,
       backgroundColor: AppTheme.cardColor,
       progressColor: gradeColor,

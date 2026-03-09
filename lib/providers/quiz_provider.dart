@@ -32,13 +32,16 @@ class QuizProvider extends ChangeNotifier {
   QuestionModel get currentQuestion => _questions[_currentIndex];
   int get totalQuestions => _questions.length;
   bool get isLastQuestion => _currentIndex >= _questions.length - 1;
-  int get correctAnswersCount =>
-      _userAnswers.where((a) => a != -1).
-          toList()
-          .asMap()
-          .entries
-          .where((e) => e.value == _questions[e.key].correctIndex)
-          .length;
+  int get correctAnswersCount {
+    int count = 0;
+    for (int i = 0; i < _userAnswers.length; i++) {
+      if (_userAnswers[i] != -1 && _userAnswers[i] == _questions[i].correctIndex) {
+        count++;
+      }
+    }
+    return count;
+  }
+
   int get wrongAnswersCount => _questions.length - correctAnswersCount;
   double get scorePercent =>
       _questions.isEmpty ? 0 : (correctAnswersCount / _questions.length);
@@ -85,7 +88,7 @@ class QuizProvider extends ChangeNotifier {
   // ─── Start Quiz ───────────────────────────────────────────
   void startQuiz(String category) {
     _selectedCategory = category;
-    _questions = QuestionsData.getQuestions(category);
+    _questions = List.from(QuestionsData.getQuestions(category));
     _questions.shuffle();
     _currentIndex = 0;
     _score = 0;

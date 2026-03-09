@@ -19,6 +19,18 @@ class _QuizScreenState extends State<QuizScreen>
     with SingleTickerProviderStateMixin {
   late final AnimationController _questionAnim;
   int _previousIndex = -1;
+  bool _isNavigating = false;
+
+  void _onQuizStateChanged() {
+    final provider = context.read<QuizProvider>();
+    if (provider.status == QuizStatus.finished && !_isNavigating) {
+      _isNavigating = true;
+      provider.removeListener(_onQuizStateChanged); // Stop listening to avoid duplicates
+      if (mounted) {
+        Navigator.pushReplacementNamed(context, '/result');
+      }
+    }
+  }
 
   @override
   void initState() {
@@ -27,11 +39,20 @@ class _QuizScreenState extends State<QuizScreen>
       vsync: this,
       duration: const Duration(milliseconds: 400),
     )..forward();
+    
+    // Add safe listener for navigation
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        context.read<QuizProvider>().addListener(_onQuizStateChanged);
+      }
+    });
   }
 
   @override
   void dispose() {
     _questionAnim.dispose();
+    final provider = context.read<QuizProvider>();
+    provider.removeListener(_onQuizStateChanged);
     super.dispose();
   }
 
@@ -44,22 +65,6 @@ class _QuizScreenState extends State<QuizScreen>
   Widget build(BuildContext context) {
     return Consumer<QuizProvider>(
       builder: (context, provider, child) {
-        // Navigate to result screen when quiz finishes
-        if (provider.status == QuizStatus.finished) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            if (mounted) {
-              Navigator.pushReplacement(
-                context,
-                PageRouteBuilder(
-                  pageBuilder: (_, __, ___) => const ResultScreen(),
-                  transitionsBuilder: (_, anim, __, child) =>
-                      FadeTransition(opacity: anim, child: child),
-                  transitionDuration: const Duration(milliseconds: 500),
-                ),
-              );
-            }
-          });
-        }
 
         // Animate when index changes
         if (_previousIndex != provider.currentIndex) {
