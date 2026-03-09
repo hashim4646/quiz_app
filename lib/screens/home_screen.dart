@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:provider/provider.dart';
+import 'package:quiz_app/screens/quiz_screen.dart';
 import '../providers/quiz_provider.dart';
 import '../theme/app_theme.dart';
-import 'quiz_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});

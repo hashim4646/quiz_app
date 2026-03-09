@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:provider/provider.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:quiz_app/screens/result_screen.dart';
 import '../providers/quiz_provider.dart';
 import '../theme/app_theme.dart';
 import '../widgets/answer_option_card.dart';
 import '../widgets/timer_widget.dart';
-import 'result_screen.dart';
 
 class QuizScreen extends StatefulWidget {
   const QuizScreen({super.key});
